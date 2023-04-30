@@ -1,0 +1,26 @@
+{
+  "name": "whattabot",
+  "version": "0.0.1",
+  "description": "A discord bot for facilitating discussions in discord.",
+  "main": "whattabot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JohnTSimmons/whattabot.git"
+  },
+  "author": "JohnTSimmons",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JohnTSimmons/whattabot/issues"
+  },
+  "homepage": "https://github.com/JohnTSimmons/whattabot#readme",
+  "dependencies": {
+    "discord.js": "^14.9.0",
+    "dotenv": "^16.0.3",
+    "node-schedule": "^2.1.1",
+    "sequelize": "^6.31.0",
+    "sqlite3": "^5.1.6"
+  }
+}
