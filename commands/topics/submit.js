@@ -12,7 +12,8 @@ module.exports = {
             const topicInput = new TextInputBuilder()
             .setCustomId('topicInput')
             .setLabel('What is your topic you would like to discuss?')
-            .setMinLength(64)
+            .setMinLength(0)
+            .setMaxLength(255)
             .setRequired(true)
             .setStyle(TextInputStyle.Paragraph);
 

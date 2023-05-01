@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, Events, GatewayIntentBits, InteractionType } = require('discord.js');
-const Sequelize = require('sequelize');
+const { handleModal } = require('./modal_handlers.js')
 require('dotenv').config();
 
 //Environment variables.
@@ -11,14 +11,6 @@ const guildId = process.env.GUILD_ID;
 
 //Our discord Client
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages] });
-
-//Our database ORM
-const sequelize = new Sequelize('database', '', '', {
-    host: 'localhost',
-    dialect: 'sqlite',
-    logging: false,
-    storage: process.env.DATABASE_NAME,
-});
 
 //Collection for our commands.
 client.commands = new Collection();
@@ -52,7 +44,8 @@ client.on(Events.InteractionCreate, async interaction => {
     //Handle model inputs first before checking if its a slash command.
     if (interaction.type === InteractionType.ModalSubmit){
         console.log('Modal Submitted!');
-        interaction.reply("Done!");
+        handleModal(interaction);
+        interaction.reply("200: Ok");
         return;
     }
 
