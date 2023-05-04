@@ -2,7 +2,7 @@ const { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, Act
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('addtopic')
+        .setName('get_topic_count_by_author')
         .setDescription('Allows you to add a topic!'),
         async execute(interaction) {
             const modal = new ModalBuilder()

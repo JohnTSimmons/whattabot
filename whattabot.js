@@ -1,13 +1,13 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, Events, GatewayIntentBits, InteractionType } = require('discord.js');
-const { handleModal } = require('./modal_handlers.js')
+const { handleModal } = require('./src/modal_handlers.js');
+const { get_channel, get_guild } = require('./src/channel_helpers.js');
+const { start_job } = require('./src/job.js');
 require('dotenv').config();
 
 //Environment variables.
 const token = process.env.DISCORD_TOKEN;
-const clientId = process.env.CLIENT_ID;
-const guildId = process.env.GUILD_ID;
 
 //Our discord Client
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages] });
@@ -34,21 +34,24 @@ for (const folder of commandFolders) {
 	}
 }
 
-//Post Ready message.
-client.once(Events.ClientReady, c => {
-    console.log('We are ready! logged in as: ' + c.user.tag);
-});
 
 //Handle Commands
 client.on(Events.InteractionCreate, async interaction => {
-    //Handle model inputs first before checking if its a slash command.
+    //Handle model inputs first before checking if its a chat input command.
     if (interaction.type === InteractionType.ModalSubmit){
-        console.log('Modal Submitted!');
-        handleModal(interaction);
-        interaction.reply("200: Ok");
-        return;
+		try {
+			await handleModal(interaction);
+		} catch (error) {
+			console.error(error);
+			if(interaction.replied || interaction.deferred) {
+				await interaction.followUp({ content: 'There was an error while executing this modal!', ephemeral: true });
+			} else {
+				await interaction.reply({ content: 'There was an error while executing this modal!', ephemeral: true });
+			}
+		}
     }
 
+	//If the command is not a chat input command just return.
 	if (!interaction.isChatInputCommand()) return;
 
 	const command = interaction.client.commands.get(interaction.commandName);
@@ -71,3 +74,21 @@ client.on(Events.InteractionCreate, async interaction => {
 });
 
 client.login(token);
+
+async function main(){
+	//Post Ready message.
+	client.once(Events.ClientReady, c => {
+		console.log('We are ready! logged in as: ' + c.user.tag);
+		let chan = null;
+		const guild = get_guild(process.env.GUILD_ID, client).then(
+			chan = get_channel(process.env.MAIN_TEXT_CHANNEL_ID, client).then(
+				//this.chan.send("Started Bot")
+				start_job(this.guild, this.chan).then(
+					console.log('Started Job.')
+				)
+			)
+		);
+	});
+};
+//Run our main function.
+main();
