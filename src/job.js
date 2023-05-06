@@ -52,18 +52,17 @@ async function start_job(guild, chan){
     });
 
     const check_job = schedule.scheduleJob(check_rule, function(){
-        const is_zero = (count) => {
-            if( count === 0 ){
-                return true;
+        const warn = (open_topics) => {
+            if(open_topics === 0){
+                chan.send('@everyone' + ' There is no topic to discuss! Please add a topic with /addtopic!');
             };
         };
+        
         count = count_topics().then((response) => {
-            is_zero(response)
-        })
+            warn(response);
+        });
+        
         const chan = guild.channels.cache.get(process.env.MAIN_TEXT_CHANNEL_ID);
-        if(is_zero){
-            chan.send('@everyone' + ' There is no topic to discuss! Please add a topic with /addtopic!');
-        }
     });
 }
 
