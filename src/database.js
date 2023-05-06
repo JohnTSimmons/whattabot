@@ -18,7 +18,7 @@ async function count_topics(){
             chosen: false
         }
     });
-    count = topics.length
+    count = topics.length;
     return new Promise(resolve => {
         resolve(count);
     }, "err: timeout");
