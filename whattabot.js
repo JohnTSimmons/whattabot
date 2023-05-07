@@ -34,7 +34,6 @@ for (const folder of commandFolders) {
 	}
 }
 
-
 //Handle Commands
 client.on(Events.InteractionCreate, async interaction => {
     //Handle model inputs first before checking if its a chat input command.

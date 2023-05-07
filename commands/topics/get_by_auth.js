@@ -1,25 +1,18 @@
-const { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
+const { count_topics_by_author } = require("../../src/database.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('get_topic_count_by_author')
-        .setDescription('Allows you to add a topic!'),
+        .setName('get_submission_count_by_author')
+        .setDescription('Get the number of topics submitted by a user.')
+        .addUserOption(option => 
+            option.setName('user')
+            .setDescription('Username to count.')
+            .setRequired(true)),
         async execute(interaction) {
-            const modal = new ModalBuilder()
-            .setCustomId('topicSubmit')
-            .setTitle('Topic Submission');
-
-            const topicInput = new TextInputBuilder()
-            .setCustomId('topicInput')
-            .setLabel('What is your topic you would like to discuss?')
-            .setMinLength(0)
-            .setMaxLength(512)
-            .setRequired(true)
-            .setStyle(TextInputStyle.Paragraph);
-
-            const actionRow = new ActionRowBuilder().addComponents(topicInput);
-            modal.addComponents(actionRow);
-            await interaction.showModal(modal);
+            const target = interaction.options.getUser('user')
+            let topics_count = [0, 0];
+            topics_count = await count_topics_by_author(target.tag);
+            interaction.reply(target.tag +" has submitted " + topics_count[0] + " topics. " + topics_count[1] + " have been chosen.");
         },
-
 };
