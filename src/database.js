@@ -30,10 +30,9 @@ async function count_topics_by_author(author){
         return 0; //Return zero to prevent crash.
     }
 
-    let topics_open = await prisma.topic.findMany({
+    let topics = await prisma.topic.findMany({
         where: {
             author: author,
-            chosen: false
         }
     });
 
@@ -44,13 +43,24 @@ async function count_topics_by_author(author){
             }
         });
     
-    count_open = topics_open.length;
+    count_total = topics.length;
     count_closed = topics_closed.length;
     return new Promise(resolve => {
-        resolve([count_open, count_closed]);
+        resolve([count_total, count_closed]);
     }, "err: timeout");
 };
 
+async function get_topics_by_author(author){
+    let topics = await prisma.topic.findMany({
+        where: {
+            author: author,
+        }
+    })
+
+    return new Promise(resolve => {
+        resolve(topics);
+    }, "err: timeout");
+}
 
 async function get_topic(){
     let topic = await prisma.$queryRaw`SELECT * FROM Topic WHERE chosen=FALSE ORDER BY RANDOM() LIMIT 1`;
@@ -74,5 +84,5 @@ async function get_topic(){
 };
 
 module.exports = {
-    write_topic, get_topic, count_topics, count_topics_by_author
+    write_topic, get_topic, count_topics, count_topics_by_author, get_topics_by_author
 };

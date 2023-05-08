@@ -10,7 +10,7 @@ require('dotenv').config();
 const token = process.env.DISCORD_TOKEN;
 
 //Our discord Client
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages] });
 
 //Collection for our commands.
 client.commands = new Collection();
