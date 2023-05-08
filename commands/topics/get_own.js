@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, codeBlock, inlineCode } = require("discord.js");
 const { get_topics_by_author } = require("../../src/database.js")
 
 module.exports = {
@@ -10,10 +10,9 @@ module.exports = {
             const topics = await get_topics_by_author(interaction.user.tag);
             const user = interaction.user;
             await user.send("Prepare for spam, this may take a while.");
-            await user.send("Number - Chosen - Content");
             let counter = 1;
             topics.forEach(topic =>{
-                user.send(counter + " --- " + topic.chosen + " --- " + topic.content);
+                user.send(codeBlock(counter + ' --- Chosen: ' + topic.chosen + '\n' + topic.content));
                 counter += 1;
             });
             await interaction.followUp("Done!");
